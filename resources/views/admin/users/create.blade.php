@@ -31,7 +31,9 @@
         </div>
         <div class="form-group">
             {!! Form::label('photo_id', 'File: ') !!}
-            {!! Form::file ('photo_id', null, ['class'=>'form-control']) !!}
+            {!! Form::file ('photo_id', null, ['class'=>'profileavatar']) !!}
+            {{--alt='avatar-{{ $user->username}}' class='profileavatar'>--}}
+
         </div>
 
         <div class="form-group">
