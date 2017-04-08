@@ -129,8 +129,9 @@ class AdminUsersController extends Controller
     public function destroy($id)
     {
         $user= User::find($id);
-        unlink(public_path(). $user->photo->file);
-        if ($photo=Photo::find($user->photo_id)){
+
+        if ($photo=$user->photo){
+            unlink(public_path(). $user->photo->file);
             $photo->delete();
         }
         $user->delete();
