@@ -3,12 +3,28 @@
 
     <h1>Edit User</h1>
         <div class="row">
-        <div class="col-sm-2">
-            @foreach($user->photo as $photo)
-                <div class="form-group"><img height="100" src="{{$photo ? $photo->file :'http://placehold.it/400x400'}}" alt=" "></div>
+        {{--<div class="col-sm-2">--}}
+            {{--@foreach($user->photo as $photo)--}}
+                {{----}}
+                {{--@endforeach--}}
+
+        {{--</div>--}}
+            <div class="col-sm-2">
+                {!! Form::label( 'Photo: ') !!}
+                @foreach($user->photo as $photo)
+                    <div class="form-group">
+
+                        {!! Form::open(['method'=>'DELETE' ,'action'=>['AdminMediaController@destroy', $photo->id]])!!}
+
+                        <img height="100" src="{{$photo ? $photo->file :'http://placehold.it/400x400'}}" alt=" ">
+                        {!! Form::submit('Delete', ['class'=>'btn btn-danger']) !!}
+
+                        {!! Form::close() !!}
+                    </div>
                 @endforeach
 
-        </div>
+
+            </div>
         <div class="col-sm-9">
             {!! Form::model($user,['method'=>'PATCH' ,'action'=>['AdminUsersController@update',$user->id],'files'=>true])!!}
 

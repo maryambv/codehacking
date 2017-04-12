@@ -20,6 +20,9 @@ class Post extends Model
     public function photo(){
         return $this->hasMany('App\Photo');
     }
+    public function comment(){
+        return $this->hasMany('App\Comment');
+    }
     public function category(){
         return $this->belongsTo('App\Category');
     }

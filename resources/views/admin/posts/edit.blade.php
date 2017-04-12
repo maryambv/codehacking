@@ -6,7 +6,13 @@
         {!! Form::label( 'Photo: ') !!}
         @foreach($post->photo as $photo)
             <div class="form-group">
-                <img height="100" src="{{$photo ? $photo->file :'http://placehold.it/400x400'}}" alt=" ">
+
+                {!! Form::open(['method'=>'DELETE' ,'action'=>['AdminMediaController@destroy', $photo->id]])!!}
+
+                     <img height="100" src="{{$photo ? $photo->file :'http://placehold.it/400x400'}}" alt=" ">
+                    {!! Form::submit('Delete', ['class'=>'btn btn-danger']) !!}
+
+                {!! Form::close() !!}
             </div>
         @endforeach
 

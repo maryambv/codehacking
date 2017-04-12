@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\Post;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,6 +25,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $posts = Post::paginate(3);
+
+        return view('home',compact('posts'));
     }
 }
