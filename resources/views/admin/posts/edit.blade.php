@@ -2,7 +2,19 @@
 @section('content')
 
     <h1>Edit Post</h1>
+    <div class="col-sm-2">
+        {!! Form::label( 'Photo: ') !!}
+        @foreach($post->photo as $photo)
+            <div class="form-group">
+                <img height="100" src="{{$photo ? $photo->file :'http://placehold.it/400x400'}}" alt=" ">
+            </div>
+        @endforeach
+
+
+    </div>
+    <div class="col-sm-9">
     {!! Form::model($post,['method'=>'PATCH' ,'action'=>['AdminPostsController@update',$post->id] ,'files'=> true])!!}
+
     <div class="form-group">
         {!! Form::label('title', 'Title: ') !!}
         {!! Form::text('title', null, ['class'=>'form-control']) !!}
@@ -31,6 +43,7 @@
             </div>
 
         {!! Form::close() !!}
+    </div>
     @include('includes.form_error')
 
 @endsection

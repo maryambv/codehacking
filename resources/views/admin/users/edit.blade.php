@@ -1,11 +1,12 @@
 @extends('layouts.admin')
 @section('content')
 
-    <h1>Edit Users </h1>
+    <h1>Edit User</h1>
         <div class="row">
-        <div class="col-sm-3">
-
-            <img src="{{$user->photo ? $user->photo->file :'http://placehold.it/400x400'}}" alt="" class="img-responsive img-circle ">
+        <div class="col-sm-2">
+            @foreach($user->photo as $photo)
+                <div class="form-group"><img height="100" src="{{$photo ? $photo->file :'http://placehold.it/400x400'}}" alt=" "></div>
+                @endforeach
 
         </div>
         <div class="col-sm-9">

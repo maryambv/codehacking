@@ -9,6 +9,7 @@ use App\Role;
 use Illuminate\Http\Request;
 use App\User;
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class AdminUsersController extends Controller
@@ -20,8 +21,9 @@ class AdminUsersController extends Controller
      */
     public function index()
     {
-        //
+
         $users =User::all();
+
         return view('admin.users.index',compact('users'));
     }
 
@@ -45,16 +47,18 @@ class AdminUsersController extends Controller
     public function store(UserRequest $request)
     {
         $input=$request->all();
+        $input['password']=bcrypt($request->password);
+        unset($input['photo_id']);
+        $user=User::create($input);
 
-        if($file=$request->file('photo_id')){
+       if($file=$request->file('photo_id')){
             $name=time().$file->getClientOriginalName();
             $file->move('images',$name);
-            $photo= Photo::create(['file'=>$name]);
-            $input['photo_id']=$photo->id;
-        }
+            Photo::create(['file'=>$name, 'user_id'=>$user->id ,'post_id'=>0,'is_profile'=>1]);
+       }
 
-        $input['password']=bcrypt($request->password);
-        User::create($input);
+
+
         return redirect('admin/users');
 
     }
@@ -81,7 +85,6 @@ class AdminUsersController extends Controller
         //
         $user = User::find($id);
         $roles =Role::lists('name','id')->all();
-
         return view('admin.users.edit',compact('user','roles'));
     }
 
@@ -106,14 +109,9 @@ class AdminUsersController extends Controller
 
         if ($file =$request->file('photo_id')) {
 
-            if($lastPhoto=$user->photo){
-                 $lastPhoto->delete();
-        }
-
-            $name=time() . $file->getClientOriginalName() ;
+            $name=time().$file->getClientOriginalName();
             $file->move('images',$name);
-            $photo = Photo::create(['file'=>$name]);
-            $input['photo_id']=$photo->id;
+            Photo::create(['file'=>$name, 'user_id'=>$user->id ,'post_id'=>0,'is_profile'=>1]);
         }
         $user->update($input);
         $user->save();
@@ -130,9 +128,12 @@ class AdminUsersController extends Controller
     {
         $user= User::find($id);
 
-        if ($photo=$user->photo){
-            unlink(public_path(). $user->photo->file);
-            $photo->delete();
+        if ($photos=$user->photo){
+            foreach ($photos as $photo) {
+                unlink(public_path(). $photo->file);
+                $photo->delete();
+            }
+
         }
         $user->delete();
         Session::flash('delete_user',$user->name ." has been deleted.");

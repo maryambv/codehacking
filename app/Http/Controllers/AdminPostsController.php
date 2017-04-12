@@ -46,13 +46,13 @@ class AdminPostsController extends Controller
     {
         $user=Auth::user();
         $input= $request->all();
+        $post=$user->posts()->create($input);
         if ( $file=$request->file('photo_id')) {
-            $name = time() . $file->getClientOriginalName();
+            $name = time().$file->getClientOriginalName();
             $file->move('images', $name);
-            $photo = Photo::create(['file' => $name]);
-            $input['photo_id'] = $photo->id;
+            Photo::create(['file' => $name, 'user_id'=>$user->id , 'post_id'=>$post->id ,'is_profile'=>0]);
+
         }
-        $user->posts()->create($input);
         return redirect('/admin/posts');
     }
 
@@ -88,14 +88,16 @@ class AdminPostsController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $input = $request->all();
+        $user=Auth::user();
+        $user->posts()->whereId($id)->first()->update($input);
         if ( $file=$request->file('photo_id')) {
             $name = time() . $file->getClientOriginalName();
             $file->move('images', $name);
-            $photo = Photo::create(['file' => $name]);
-            $input['photo_id'] = $photo->id;
+            Photo::create(['file' => $name ,'user_id'=>$user->id ,'post_id'=>$id ,'is_profile'=>0]);
         }
-        Auth::user()->posts()->whereId($id)->first()->update($input);
+
         return redirect('/admin/posts');
     }
 
@@ -108,9 +110,12 @@ class AdminPostsController extends Controller
     public function destroy($id)
     {
         $post=Post::find($id);
-        if ($photo=$post->photo){
-            unlink(public_path(). $post->photo->file);
-            $photo->delete();
+        if ($photos=$post->photo){
+            foreach ($photos as $photo) {
+                unlink(public_path(). $photo->file);
+                $photo->delete();
+            }
+
         }
         $post->delete();
         return redirect('admin/posts');
