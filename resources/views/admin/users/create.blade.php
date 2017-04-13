@@ -29,12 +29,23 @@
             {!! Form::label('is_active', 'Status: ') !!}
             {!! Form::select ('is_active',array(1=>'Active',0=>'Not Active'),0, ['class'=>'form-control']) !!}
         </div>
-        <div class="form-group">
-            {!! Form::label('photo_id', 'File: ') !!}
-            {!! Form::file ('photo_id', null, ['class'=>'profileavatar']) !!}
+        {{--<div class="form-group">--}}
+            {{--{!! Form::label('photo_id', 'File: ') !!}--}}
+            {{--{!! Form::file ('photo_id', null, ['class'=>'profileavatar']) !!}--}}
             {{--alt='avatar-{{ $user->username}}' class='profileavatar'>--}}
 
-        </div>
+        {{--</div>--}}
+    <div class="form-group">
+        <input name="photo_id" type="file" accept="image/*" onchange="loadFile(event)">
+        {!! Form::label('photo_id', 'Photo: ') !!}
+        <img height="50" id="photo_id"/>
+        <script>
+            var loadFile = function(event) {
+                var output = document.getElementById('photo_id');
+                output.src = URL.createObjectURL(event.target.files[0]);
+            };
+        </script>
+    </div>
 
         <div class="form-group">
             {!! Form::submit('Create User', ['class'=>'btn btn-primary']) !!}

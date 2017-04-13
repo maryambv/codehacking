@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CommentCreateRequest;
+use App\Post;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use Illuminate\Support\Facades\Auth;
 
-class PostCommentsController extends Controller
+class UserPostsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +16,9 @@ class PostCommentsController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::paginate(1);
+
+        return view('home',compact('posts'));
     }
 
     /**
@@ -36,15 +37,9 @@ class PostCommentsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CommentCreateRequest $request)
+    public function store(Request $request)
     {
-//        return $request->all();
-            $user=Auth::user();
-            $user->comments()->create(['body' => $request->body, 'user_id'=>$user->id ,'post_id'=>$request->post_id]);
-            return redirect('/');
-
-
-
+        //
     }
 
     /**
@@ -55,7 +50,9 @@ class PostCommentsController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = Post::find($id);
+        $comments = $post->comment()->get();
+        return view('user.posts.show',compact(['post','comments']));
     }
 
     /**

@@ -8,6 +8,7 @@
 
                     <div class="panel-body">
                         <h1>Posts</h1>
+
                         <table class="table">
                             <thead>
                             <tr>
@@ -15,7 +16,7 @@
                                 <th>Title</th>
                                 <th>Owner</th>
                                 <th>Category</th>
-                                <th>Body</th>
+                                <th>Content</th>
                                 <th>Created</th>
 
 
@@ -27,21 +28,21 @@
                             @foreach($posts as $post)
                                 <tr>
                                     <td><img height="150" src="{{$post->photo->first() ? $post->photo->first()->file :'http://placehold.it/500x400'}}" alt=" "></td>
-                                    <td><a href="{{route('admin.posts.show',$post->id)}}">
+                                    <td><a href="{{route('user.posts.show',$post->id)}}">
                                             <h1>
                                             {{$post->title}}</h1>
                                         </a></td>
                                     <td>{{$post->user->name}}</td>
 
                                     <td>{{$post->category_id ? $post->category->name : 'uncategorized'}}</td>
-                                    <td>{{str_limit($post->body,7)}}</td>
+                                    <td>{{str_limit($post->body,30)}}</td>
                                     <td>{{$post->created_at->diffForHumans()}}</td>
                                 </tr>
 
                             @endforeach
                             </tbody>
                         </table>
-
+                        <div >{{$posts}}</div>
                     </div>
                 </div>
             </div>
