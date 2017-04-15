@@ -18,7 +18,7 @@
                         <div class="form-group">{{$post->body}}</div>
                         <div class="form-group">
                             @foreach($comments as $comment)
-                                <div class="form-group ">
+                                <div class="form-group comments">
                                     <div> {{$comment->user()->get()[0]->name}} :</div>
                                     <div >{{$comment->body}}</div>
 

@@ -18,7 +18,7 @@ class Post extends Model
         return $this->belongsTo('App\User');
     }
     public function photo(){
-        return $this->hasMany('App\Photo');
+        return $this->morphMany('App\Photo', 'imageable');
     }
     public function comment(){
         return $this->hasMany('App\Comment');

@@ -19,6 +19,7 @@ class CreatePhotosTable extends Migration
             $table->integer('is_profile')->default(0);
             $table->string('file');
             $table->timestamps();
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

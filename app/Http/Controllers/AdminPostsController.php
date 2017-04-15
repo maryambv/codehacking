@@ -31,7 +31,6 @@ class AdminPostsController extends Controller
      */
     public function create()
     {
-        //
         $categories=Category::lists('name','id')->all();
         return view('admin.posts.create',compact('categories'));
     }
@@ -50,8 +49,7 @@ class AdminPostsController extends Controller
         if ( $file=$request->file('photo_id')) {
             $name = time().$file->getClientOriginalName();
             $file->move('images', $name);
-            Photo::create(['file' => $name, 'user_id'=>$user->id , 'post_id'=>$post->id ,'is_profile'=>0]);
-
+            Photo::create(['file' => $name,'imageable_id'=>$post->id ,'imageable_type'=>'App\Post']);
         }
         return redirect('/admin/posts');
     }
@@ -64,7 +62,7 @@ class AdminPostsController extends Controller
      */
     public function show($id)
     {
-//
+      //
     }
 
     /**
@@ -74,7 +72,8 @@ class AdminPostsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {   $categories=Category::lists('name','id')->all();
+    {
+        $categories=Category::lists('name','id')->all();
         $post= Post::find($id);
         return view('admin.posts.edit' ,compact(['post','categories']));
     }
@@ -88,16 +87,14 @@ class AdminPostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $input = $request->all();
         $user=Auth::user();
         $user->posts()->whereId($id)->first()->update($input);
         if ( $file=$request->file('photo_id')) {
             $name = time() . $file->getClientOriginalName();
             $file->move('images', $name);
-            Photo::create(['file' => $name ,'user_id'=>$user->id ,'post_id'=>$id ,'is_profile'=>0]);
+            Photo::create(['file' => $name ,'imageable_id'=>$id ,'imageable_type'=>'App\Post']);
         }
-
         return redirect('/admin/posts');
     }
 
@@ -115,7 +112,6 @@ class AdminPostsController extends Controller
                 unlink(public_path(). $photo->file);
                 $photo->delete();
             }
-
         }
         $post->delete();
         return redirect('admin/posts');

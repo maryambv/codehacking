@@ -29,7 +29,7 @@ class User extends Authenticatable
     }
 
     public function photo(){
-        return $this->hasMany('App\Photo');
+        return $this->morphMany('App\Photo', 'imageable');
     }
     public function isAdmin(){
         if ($this->role->name == 'administrator' && $this->is_active==1){
